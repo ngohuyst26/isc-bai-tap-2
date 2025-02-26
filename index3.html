@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Hình Bình Hành To Dần Sang Phải</title>
+    <style>
+      body {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        height: 100vh;
+        margin: 0;
+        background-color: #000000;
+      }
+
+      .parallelogram {
+        width: 100px; /* Ban đầu nhỏ */
+        height: 100px;
+        background: linear-gradient(90deg, #e90808, #ffffff);
+        transform: skewX(40deg) skewY(30deg) scaleX(0.1); /* Ban đầu bình thường */
+        transform-origin: left; /* Giữ cố định cạnh trái */
+        transition: transform 3s ease, background 0.3s ease; /* Hiệu ứng mượt */
+      }
+    </style>
+  </head>
+  <body>
+    <div class="parallelogram"></div>
+
+    <script>
+      document.addEventListener("DOMContentLoaded", function () {
+        const parallelogram = document.querySelector(".parallelogram");
+
+        // Khi trang tải, hình sẽ mở rộng về bên phải nhưng không dịch chuyển cạnh trái
+        setTimeout(() => {
+          parallelogram.style.transform = "skewX(40deg) skewY(30deg) scaleX(2)";
+        }, 500);
+
+        // Khi click, đổi màu nền
+        parallelogram.addEventListener("click", function () {
+          this.style.background = "linear-gradient(45deg, red, white)";
+        });
+      });
+    </script>
+  </body>
+</html>

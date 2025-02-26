@@ -1,0 +1,94 @@
+<!DOCTYPE html>
+<html lang="vi">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Vẽ Hình Bình Hành Gradient</title>
+  </head>
+  <body>
+    <div
+      style="
+        background-color: black;
+        width: 100wh;
+        height: 100vh;
+        padding: 100px;
+      "
+    >
+      <canvas id="myCanvas" width="1000" height="700"></canvas>
+    </div>
+
+    <script>
+      // Lấy thẻ canvas và context
+      const canvas = document.getElementById("myCanvas");
+      const ctx = canvas.getContext("2d");
+      canvas.style.borderWidth = "0";
+
+      // Xác định tọa độ của 4 đỉnh
+      const x = 100,
+        y = 60; // Góc trên bên trái
+      const width = 520; // Độ dài cạnh đáy
+      const height = 100; // Chiều cao
+      const skew = -60; // Độ nghiêng (dương để nghiêng sang phải)
+
+      // Biến để kiểm soát hiệu ứng xuất hiện
+      let progress = 0; // Tiến trình vẽ (0 -> 1)
+      const duration = 5000; // Thời gian hiệu ứng (2 giây)
+      let startTime = performance.now(); // Thời gian bắt đầu
+      let color = "red"; // Màu ban đầu
+
+      // Hàm tạo gradient
+      function createGradient() {
+        const gradient = ctx.createLinearGradient(x, y, x + width - 200, y);
+        gradient.addColorStop(0, color); // Màu bên trái
+        gradient.addColorStop(0.1, color);
+        gradient.addColorStop(1, "white"); // Màu bên phải
+        return gradient;
+      }
+
+      // Hàm vẽ hình bình hành với hiệu ứng xuất hiện
+      function drawParallelogram() {
+        const currentTime = performance.now();
+        progress = Math.min((currentTime - startTime) / duration, 1); // Tính tiến trình
+
+        // Xóa canvas trước khi vẽ
+        ctx.clearRect(0, 0, canvas.width, canvas.height);
+
+        // Tính toán chiều rộng hiện tại dựa trên tiến trình
+        const currentWidth = width * progress;
+
+        // Bắt đầu vẽ hình bình hành
+        ctx.beginPath();
+        ctx.moveTo(x + skew, y); // Điểm A (góc trên trái)
+        ctx.lineTo(x + currentWidth - progress + skew, y * progress - skew); // Điểm B (góc trên phải)
+        ctx.lineTo(
+          x + currentWidth - progress - skew,
+          y + height + progress * -skew
+        ); // Điểm C (góc dưới phải)
+        ctx.lineTo(x - skew, y + height); // Điểm D (góc dưới trái)
+        ctx.closePath();
+
+        // Đổ màu gradient
+        ctx.fillStyle = createGradient();
+        ctx.fill();
+
+        // Vẽ viền
+        ctx.strokeStyle = "black";
+        ctx.stroke();
+
+        // Nếu tiến trình chưa hoàn thành, tiếp tục vẽ
+        if (progress < 1) {
+          requestAnimationFrame(drawParallelogram);
+        } else {
+          // Khi hoàn thành, reset và đổi màu
+          progress = 0;
+          startTime = performance.now();
+          color = color === "red" ? "blue" : "red"; // Đổi màu giữa đỏ và xanh
+          requestAnimationFrame(drawParallelogram); // Bắt đầu lại
+        }
+      }
+
+      // Bắt đầu vẽ
+      drawParallelogram();
+    </script>
+  </body>
+</html>
