@@ -49,7 +49,7 @@ class CanvasEffect {
       this.x = 0; // Reset x về 0
       this.y = 0; // Reset y về 0
     }
-    const animateFrame = requestAnimationFrame(this.animate.bind(this));
+    requestAnimationFrame(this.animate.bind(this));
     this.#colorGradient();
     this.#ctx.strokeStyle = this.gradient;
   }
